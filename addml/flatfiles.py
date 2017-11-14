@@ -15,7 +15,7 @@ def wrapper_elems(tag, child_elements=None):
     """
     elems = ['flatFiles', 'flatFileDefinitions', 'recordDefinitions',
              'fieldDefinitions', 'structureTypes', 'flatFileTypes',
-             'recordTypes', 'fieldTypes']
+             'recordTypes', 'fieldTypes', 'properties']
     if tag in elems:
         wrapper_el = _element(tag)
         if child_elements:
@@ -30,13 +30,13 @@ def definition_elems(tag, attname, reference=None, child_elements=None):
     """
     elems = ['flatFile', 'flatFileDefinition', 'recordDefinition']
     ref_elems = ['flatFile', 'fieldDefinition']
-    noref_elems = ['flatFileType', 'recordType', 'fieldType']
+    noref_elems = ['flatFileType', 'recordType', 'fieldType', 'property']
     if tag in elems or tag in ref_elems or tag in noref_elems:
         _definition_el = _element(tag)
         _definition_el.set('name', attname)
 
         if tag in ref_elems and not reference:
-            reference = str(uuid4)
+            reference = str(uuid4())
         if tag in noref_elems:
             reference = None
 
