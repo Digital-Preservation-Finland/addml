@@ -4,3 +4,4 @@ possible.
 
 from addml.base import *
 from addml.flatfiles import *
+from addml.split_addml import *
