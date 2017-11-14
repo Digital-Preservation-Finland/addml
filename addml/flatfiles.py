@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import xml_helpers.utils as h
 
-from siptools_archives.techmd_utils.base import _element, _subelement, \
+from addml.base import _element, _subelement, \
         iter_elements, NAMESPACES
 
 

@@ -13,10 +13,10 @@ from xml_helpers.utils import readfile, serialize
 from siptools.utils import encode_path
 from siptools_archives.techmd_utils.utils import create_techmdfile, \
         add_to_tempfile
-from siptools_archives.techmd_utils.base import parse_name, parse_reference, \
+from addml.base import parse_name, parse_reference, \
         find_section_by_name, addml, sections_count, iter_sections, \
         iter_elements
-from siptools_archives.techmd_utils.flatfiles import iter_flatfiles, \
+from addml.flatfiles import iter_flatfiles, \
         wrapper_elems, parse_charset, flatfiledefinition_count, \
         iter_flatfiledefinitions
 
@@ -95,12 +95,12 @@ def parse_addml(relpath, path, workspace):
 
 
 def create_new_addml(root, flatfiledefinition):
-    """Creates new addml metadata for each flatfile in the original addml
-    metadata. Only the relevant sections from flatFileDefinitions,
+    """Creates new addml metadata for each flatFileDefinition in the
+    original addml metadata. Only the relevant sections from flatFiles,
     flatFileTypes and recordTypes are included in the new addml metadata
     as well as the fieldTypes section. The sections relevance is derived
     from reading the corresponding @typeReference and @name attributes
-    from each section starting from the <flatFile> element.
+    from each section starting from the <flatFileDefinition> element.
     """
     flatfiles_list = []
 
