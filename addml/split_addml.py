@@ -2,17 +2,10 @@
 """Functions for reading and writing ADDML data.
 """
 
-import os
 import copy
-import argparse
-import sys
 
-import lxml.etree as ET
-from xml_helpers.utils import readfile, serialize
+from xml_helpers.utils import readfile
 
-from siptools.utils import encode_path
-from siptools_archives.techmd_utils.utils import create_techmdfile, \
-        add_to_tempfile
 from addml.base import parse_name, parse_reference, \
         find_section_by_name, addml, sections_count, iter_sections, \
         iter_elements
@@ -21,77 +14,31 @@ from addml.flatfiles import iter_flatfiles, \
         iter_flatfiledefinitions
 
 
-def parse_arguments(arguments):
-    """ Create arguments parser and return parsed command line
-    arguments.
+def parse_addml(path):
     """
-    parser = argparse.ArgumentParser(description='Tool for '
-                                     'modifying ADDML')
-    parser.add_argument('package', type=str, help='Path to ADDML file')
-    parser.add_argument('--workspace', dest='workspace', type=str,
-                        default='./workspace', help="Workspace directory")
-
-    return parser.parse_args(arguments)
-
-
-def main(arguments=None):
-    """The main method for argparser"""
-    args = parse_arguments(arguments)
-    relpath, path = check_addml_relpath(args.package)
+    """
     root = readfile(path).getroot()
-
-    tempfile_root = ET.Element('contents')
-
     count = flatfiledefinition_count(root)
+
     for flatfiledef in iter_flatfiledefinitions(root):
         if count > 1:
             addmldata = create_new_addml(root, flatfiledef)
         name = parse_name(flatfiledef)
         reference = parse_reference(flatfiledef)
-        techmdid = create_techmdfile(args.workspace, 'ADDML', '8.3',
-                                     addmldata, name)
 
-        for flatfile in iter_flatfiles(root):
-            if parse_reference(flatfile) == reference:
-                flatfilename = parse_name(flatfile)
-                add_to_tempfile(tempfile_root, name, flatfilename,
-                                'ADDML', relpath)
-
-    tempfilename = encode_path('addml', suffix='file.xml')
-    with open(os.path.join(args.workspace, tempfilename), 'w+') as outfile:
-        outfile.write(serialize(tempfile_root))
-        print "Wrote addml pairings to tempfile %s" % outfile.name
-
-    return 0
+        yield addmldata
 
 
-def parse_addml(relpath, path, workspace):
-    """The main method for argparser"""
+def parse_flatfiles(path, reference):
+    """
+    """
     root = readfile(path).getroot()
 
-    tempfile_root = ET.Element('contents')
+    for flatfile in iter_flatfiles(root):
+        if parse_reference(flatfile) == reference:
+            flatfilename = parse_name(flatfile)
 
-    count = flatfiledefinition_count(root)
-    for flatfiledef in iter_flatfiledefinitions(root):
-        if count > 1:
-            addmldata = create_new_addml(root, flatfiledef)
-        name = parse_name(flatfiledef)
-        reference = parse_reference(flatfiledef)
-        techmdid = create_techmdfile(workspace, 'ADDML', '8.3',
-                                     addmldata, name)
-
-        for flatfile in iter_flatfiles(root):
-            if parse_reference(flatfile) == reference:
-                flatfilename = parse_name(flatfile)
-                add_to_tempfile(tempfile_root, name, flatfilename,
-                                'ADDML', relpath)
-
-    tempfilename = encode_path('addml', suffix='file.xml')
-    with open(os.path.join(workspace, tempfilename), 'w+') as outfile:
-        outfile.write(serialize(tempfile_root))
-        print "Wrote addml pairings to tempfile %s" % outfile.name
-
-    return 0
+            yield flatfilename
 
 
 def create_new_addml(root, flatfiledefinition):
@@ -181,8 +128,3 @@ def get_charset(path, filename):
 
             return True, charset
     return False, None
-
-
-if __name__ == '__main__':
-    RETVAL = main()
-    sys.exit(RETVAL)
