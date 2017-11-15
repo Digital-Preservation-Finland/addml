@@ -17,12 +17,26 @@ def test_element():
     assert h.compare_trees(a._element('xxx'), ET.fromstring(xml)) == True
 
 
+def test_element_with_prefix():
+    """Test ADDML _element"""
+    xml = """<addml:flatFileDefinition xmlns:addml="http://www.arkivverket.no/standarder/addml"/>"""
+    assert h.compare_trees(a._element('definition', prefix="flatFile"), ET.fromstring(xml)) == True
+
+
 def test_subelement():
     """Test ADDML _subelement"""
     xml = """<addml:xxx xmlns:addml="http://www.arkivverket.no/standarder/addml"/>"""
     parent_xml = """<addml:addml xmlns:addml="http://www.arkivverket.no/standarder/addml"/>"""
     parent = ET.fromstring(parent_xml)
     assert h.compare_trees(a._subelement(parent, 'xxx'), ET.fromstring(xml)) == True
+
+
+def test_subelement_with_prefix():
+    """Test ADDML _subelement"""
+    xml = """<addml:flatFileType xmlns:addml="http://www.arkivverket.no/standarder/addml"/>"""
+    parent_xml = """<addml:flatFileTypes xmlns:addml="http://www.arkivverket.no/standarder/addml"/>"""
+    parent = ET.fromstring(parent_xml)
+    assert h.compare_trees(a._subelement(parent, 'type', prefix="flatFile"), ET.fromstring(xml)) == True
 
 
 def test_addml():
@@ -97,3 +111,14 @@ def test_find_section_by_name():
     assert ffile.get('definitionReference') == 'def2'
 
 
+def test_find_section_by_name_fail():
+    """Test that the find_section_by_name function returns None
+    if no section matches the name.
+    """
+    file1 = f.definition_elems('flatFile', 'file1', reference='def1')
+    file2 = f.definition_elems('flatFile', 'file2', reference='def2')
+    file3 = f.definition_elems('flatFile', 'file3', reference='def3')
+    xml = a.addml(child_elements=[file1, file2, file3])
+
+    ffile = a.find_section_by_name(xml, 'flatFile', 'filer4')
+    assert ffile == None

@@ -79,6 +79,13 @@ def test_addml_basic_elem():
     assert h.compare_trees(ET.fromstring(xml), charset) == True
 
 
+def test_addml_basic_elem_fail():
+    """Tests that the addml_basic_elem function doesn't write
+    data if input tag is unsupported.."""
+    fail = f.addml_basic_elem('test', 'test')
+    assert fail == None
+
+
 def test_delimfileformat():
     """Tests the delimfileformat function."""
     xml = """<addml:delimFileFormat
