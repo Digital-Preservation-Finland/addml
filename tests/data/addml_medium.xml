@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addml:addml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.arkivverket.no/standarder/addml http://schema.arkivverket.no/ADDML/latest/addml.xsd" xmlns:addml="http://www.arkivverket.no/standarder/addml">
+	<addml:dataset name="Testdata">
+		<addml:description>Testdata</addml:description>
+		<addml:reference/>
+		<addml:flatFiles>
+			<addml:flatFile name="csvfile1.csv" definitionReference="testdef1" />
+			<addml:flatFile name="csvfile2.csv" definitionReference="testdef2" />
+			<addml:flatFile name="csvfile3.csv" definitionReference="testdef3" />
+			<addml:flatFileDefinitions>
+				<addml:flatFileDefinition name="testdef1" typeReference="testtype1">
+					<addml:recordDefinitions>
+						<addml:recordDefinition name="testrecord1" typeReference="testrectype1">
+							<addml:fieldDefinitions>
+								<addml:fieldDefinition name="test1" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+								<addml:fieldDefinition name="test2" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+								<addml:fieldDefinition name="test3" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+							</addml:fieldDefinitions>
+						</addml:recordDefinition>
+					</addml:recordDefinitions>
+				</addml:flatFileDefinition>
+				<addml:flatFileDefinition name="testdef2" typeReference="testtype2">
+					<addml:recordDefinitions>
+						<addml:recordDefinition name="testrecord2" typeReference="testrectype2">
+							<addml:fieldDefinitions>
+								<addml:fieldDefinition name="test1" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+								<addml:fieldDefinition name="test2" typeReference="Integer">
+									<addml:description/>
+								</addml:fieldDefinition>
+							</addml:fieldDefinitions>
+						</addml:recordDefinition>
+					</addml:recordDefinitions>
+				</addml:flatFileDefinition>
+				<addml:flatFileDefinition name="testdef3" typeReference="testtype3">
+					<addml:recordDefinitions>
+						<addml:recordDefinition name="testrecord3" typeReference="testrectype3">
+							<addml:fieldDefinitions>
+								<addml:fieldDefinition name="test1" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+								<addml:fieldDefinition name="test2" typeReference="String">
+									<addml:description/>
+								</addml:fieldDefinition>
+								<addml:fieldDefinition name="test3" typeReference="Integer">
+									<addml:description/>
+								</addml:fieldDefinition>
+							</addml:fieldDefinitions>
+						</addml:recordDefinition>
+					</addml:recordDefinitions>
+				</addml:flatFileDefinition>
+			</addml:flatFileDefinitions>
+			<addml:structureTypes>
+				<addml:flatFileTypes>
+					<addml:flatFileType name="testtype1">
+						<addml:charset>UTF-8</addml:charset>
+						<addml:delimFileFormat>
+							<addml:recordSeparator>CR+LF</addml:recordSeparator>
+							<addml:fieldSeparatingChar>;</addml:fieldSeparatingChar>
+						</addml:delimFileFormat>
+					</addml:flatFileType>
+					<addml:flatFileType name="testtype2">
+						<addml:charset>UTF-8</addml:charset>
+						<addml:delimFileFormat>
+							<addml:recordSeparator>CR+LF</addml:recordSeparator>
+							<addml:fieldSeparatingChar>;</addml:fieldSeparatingChar>
+							<addml:quotingChar>"</addml:quotingChar>
+						</addml:delimFileFormat>
+					</addml:flatFileType>
+					<addml:flatFileType name="testtype3">
+						<addml:charset>UTF-8</addml:charset>
+						<addml:delimFileFormat>
+							<addml:recordSeparator>CR+LF</addml:recordSeparator>
+							<addml:fieldSeparatingChar>,</addml:fieldSeparatingChar>
+							<addml:quotingChar>"</addml:quotingChar>
+						</addml:delimFileFormat>
+					</addml:flatFileType>
+				</addml:flatFileTypes>
+				<addml:recordTypes>
+					<addml:recordType name="testrectype1">
+						<addml:trimmed />
+					</addml:recordType>
+					<addml:recordType name="testrectype2">
+						<addml:trimmed />
+					</addml:recordType>
+					<addml:recordType name="testrectype3">
+						<addml:trimmed />
+					</addml:recordType>
+				</addml:recordTypes>
+				<addml:fieldTypes>
+					<addml:fieldType name="String">
+						<addml:dataType>string</addml:dataType>
+					</addml:fieldType>
+					<addml:fieldType name="Integer">
+						<addml:dataType>integer</addml:dataType>
+					</addml:fieldType>
+				</addml:fieldTypes>
+			</addml:structureTypes>
+		</addml:flatFiles>
+	</addml:dataset>
+</addml:addml>

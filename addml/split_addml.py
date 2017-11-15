@@ -6,18 +6,17 @@ import copy
 
 from xml_helpers.utils import readfile
 
-from addml.base import parse_name, parse_reference, \
-        find_section_by_name, addml, sections_count, iter_sections, \
-        iter_elements
-from addml.flatfiles import iter_flatfiles, \
-        wrapper_elems, parse_charset, flatfiledefinition_count, \
-        iter_flatfiledefinitions
+from addml.base import parse_name, parse_reference, find_section_by_name, \
+        addml, sections_count, iter_sections, iter_elements
+from addml.flatfiles import iter_flatfiles, wrapper_elems, parse_charset, \
+        flatfiledefinition_count, iter_flatfiledefinitions
 
 
-def parse_addml(path):
+def parse_flatfiledefinitions(path):
     """
     """
     root = readfile(path).getroot()
+    addmldata = root
     count = flatfiledefinition_count(root)
 
     for flatfiledef in iter_flatfiledefinitions(root):
@@ -29,7 +28,7 @@ def parse_addml(path):
         yield addmldata
 
 
-def parse_flatfiles(path, reference):
+def parse_flatfilenames(path, reference):
     """
     """
     root = readfile(path).getroot()
@@ -112,7 +111,7 @@ def check_addml_relpath(path):
     return False, False
 
 
-def get_charset(path, filename):
+def get_charset_with_filename(path, filename):
     """
     """
     root = readfile(path).getroot()
