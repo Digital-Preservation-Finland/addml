@@ -13,8 +13,6 @@ NAMESPACES = {'addml': ADDML_NS,
 
 def addml_ns(tag, prefix=""):
     """Adds ADDML namespace to tags"""
-    path = '{%s}%s' % (ADDML_NS, tag)
-
     if prefix:
         tag = tag[0].upper() + tag[1:]
         return'{%s}%s%s' % (ADDML_NS, prefix, tag)
@@ -27,9 +25,9 @@ def _element(tag, prefix="", ns={}):
     Prefix parameter is useful for adding prefixed to lower case tags.
     It just uppercases first letter of tag and appends it to prefix::
 
-        element = _element('objectIdentifier', 'linking')
+        element = _element('definition', 'flatFile')
         element.tag
-        'linkingObjectIdentifier'
+        'flatFileDefinition'
 
     :tag: Tagname
     :prefix: Prefix for the tag (default="")
@@ -55,7 +53,9 @@ def _subelement(parent, tag, prefix="", ns={}):
 
 
 def addml(child_elements=None, namespaces=NAMESPACES):
-    """
+    """Creates an addml root element with correct namespace definition
+    and schemalocation attributes. Also creates the mandatory
+    <addml:dataset> element within the root element.
     """
     _addml = _element('addml', ns=namespaces)
     _addml.set(
@@ -86,13 +86,14 @@ def iter_elements(starting_element, tag):
 
 
 def parse_name(section):
-    """
-    """
+    """Returns the value of the @name attribute of an element."""
     return section.get('name')
 
 
 def parse_reference(section):
-    """
+    """Returns the value of the reference attribute of an element.
+    The reference attribute is either @definitionReference if the
+    element is a <flatFile> or @typeReference for other elements.
     """
     if section.tag == addml_ns('flatFile'):
         referencetype = 'definitionReference'
@@ -103,21 +104,18 @@ def parse_reference(section):
 
 
 def iter_sections(addml_el, section):
-    """
-    """
+    """Iterate all addml data sections from starting element."""
     for elem in iter_elements(addml_el, section):
         yield elem
 
 
 def sections_count(addml_el, section):
-    """
-    """
+    """Return number of sections in ADDML data."""
     return len([x for x in iter_sections(addml_el, section)])
 
 
 def find_section_by_name(addml_el, section, name):
-    """
-    """
+    """Find an addml section by its @name attribute value."""
     for elem in iter_sections(addml_el, section):
         if elem.get('name') == name:
             return elem

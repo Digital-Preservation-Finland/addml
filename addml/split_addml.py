@@ -2,18 +2,21 @@
 """Functions for reading and writing ADDML data.
 """
 
+import os
 import copy
 
 from xml_helpers.utils import readfile
 
 from addml.base import parse_name, parse_reference, find_section_by_name, \
-        addml, sections_count, iter_sections, iter_elements
+        addml, iter_sections
 from addml.flatfiles import iter_flatfiles, wrapper_elems, parse_charset, \
         flatfiledefinition_count, iter_flatfiledefinitions
 
 
 def parse_flatfiledefinitions(path):
-    """
+    """Parses ADDML data and splits the data into new ADDML data
+    files for each flatFileDefinition in the original data file.
+    Returns the ADDML data for each created file.
     """
     root = readfile(path).getroot()
     addmldata = root
@@ -22,14 +25,13 @@ def parse_flatfiledefinitions(path):
     for flatfiledef in iter_flatfiledefinitions(root):
         if count > 1:
             addmldata = create_new_addml(root, flatfiledef)
-        name = parse_name(flatfiledef)
-        reference = parse_reference(flatfiledef)
 
         yield addmldata
 
 
 def parse_flatfilenames(path, reference):
-    """
+    """Returns the @name attribute for each flatFile whose
+    @definitionReference attribute value matches the supplied value.
     """
     root = readfile(path).getroot()
 
@@ -99,7 +101,7 @@ def check_addml_relpath(path):
 
     addml_filename = 'addml.xml'
 
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         for filename in files:
             if filename == addml_filename:
                 addml_relpath = os.path.relpath(root, path)
@@ -112,7 +114,10 @@ def check_addml_relpath(path):
 
 
 def get_charset_with_filename(path, filename):
-    """
+    """Returns the charset from the ADDML data for a given file. The
+    filename is matched against the @name attribute for each flatFile
+    element and the correct charset is returned from the correct
+    flatFileType section that matches the flatFile.
     """
     root = readfile(path).getroot()
     for flatfile in iter_flatfiles(root):
@@ -125,5 +130,5 @@ def get_charset_with_filename(path, filename):
                                                 type_reference)
             charset = 'charset=%s' % parse_charset(flatfiletype)
 
-            return True, charset
-    return False, None
+            return charset
+    return None

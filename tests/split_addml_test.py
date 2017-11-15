@@ -1,6 +1,5 @@
 """Test for the ADDML flatFiles class."""
 
-import lxml.etree as ET
 import xml_helpers.utils as h
 import addml.base as a
 import addml.flatfiles as f
@@ -136,20 +135,17 @@ def test_create_new_addml_complex():
 def test_get_charset_with_filename():
     """Asserts that the function get_charset_with_filename returns the
     correct value from an ADDML data file and returns it with the string
-    'charset=' applied to it. Also asserts that the csv_file state
-    returns True.
+    'charset=' applied to it.
     """
     addml = 'tests/data/addml_complex.xml'
-    csv_state, charset = s.get_charset_with_filename(addml, 'csvfile3.csv')
-    assert csv_state == True
+    charset = s.get_charset_with_filename(addml, 'csvfile3.csv')
     assert charset == 'charset=ASCII'
 
 
 def test_get_charset_with_filename_nofile():
-    """Tests that the get_charset_with_filename returns False if no
+    """Tests that the get_charset_with_filename returns None if no
     flatfile was found with the supplied filename.
     """
     addml = 'tests/data/addml_complex.xml'
-    csv_state, charset = s.get_charset_with_filename(addml, 'csvfile7.csv')
-    assert csv_state == False
-    assert charset == None
+    charset = s.get_charset_with_filename(addml, 'csvfile7.csv')
+    assert charset is None

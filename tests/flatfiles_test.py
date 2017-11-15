@@ -7,18 +7,21 @@ import addml.flatfiles as f
 
 
 def test_wrapper_elems_ok():
-    """Tests the wrapper_elems function"""
+    """Tests the wrapper_elems function by comparing test data output
+    with a predefined string.
+    """
     xml = """<addml:flatFiles
     xmlns:addml="http://www.arkivverket.no/standarder/addml"><addml:flatFile
     name="file1" definitionReference="def1"></addml:flatFile><addml:flatFile
     name="file2" definitionReference="def2"></addml:flatFile><addml:flatFile
-    name="file3" definitionReference="def3"></addml:flatFile></addml:flatFiles>"""
+    name="file3"
+    definitionReference="def3"></addml:flatFile></addml:flatFiles>"""
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     file2 = f.definition_elems('flatFile', 'file2', reference='def2')
     file3 = f.definition_elems('flatFile', 'file3', reference='def3')
     wrapper_elem = f.wrapper_elems('flatFiles', child_elements=[file1, file2,
                                                                 file3])
-    assert h.compare_trees(ET.fromstring(xml), wrapper_elem) == True
+    assert h.compare_trees(ET.fromstring(xml), wrapper_elem) is True
 
 
 def test_wrapper_elems_fail():
@@ -27,20 +30,24 @@ def test_wrapper_elems_fail():
     """
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     wrapper_elem = f.wrapper_elems('flatFyles', child_elements=[file1])
-    assert wrapper_elem == None
+    assert wrapper_elem is None
 
 
 def test_definition_elems_flatfile():
-    """Tests the definition_elems function."""
-    xml = """<addml:flatFile xmlns:addml="http://www.arkivverket.no/standarder/addml"
+    """Tests the definition_elems function by comparing test data output
+    with a predefined string.
+    """
+    xml = """<addml:flatFile
+    xmlns:addml="http://www.arkivverket.no/standarder/addml"
     name="file1" definitionReference="def1"><addml:properties><addml:property
     name="prop1"></addml:property></addml:properties></addml:flatFile>"""
     fprop = f.definition_elems('property', 'prop1')
     fprops = f.wrapper_elems('properties', child_elements=[fprop])
     ffile = f.definition_elems('flatFile', 'file1',
-            reference='def1', child_elements=[fprops])
+                               reference='def1',
+                               child_elements=[fprops])
 
-    assert h.compare_trees(ET.fromstring(xml), ffile) == True
+    assert h.compare_trees(ET.fromstring(xml), ffile) is True
 
 
 def test_definition_elems_noname():
@@ -68,34 +75,44 @@ def test_definition_elems_fail():
     data if the supplied tag is unsupported.
     """
     file1 = f.definition_elems('flatFyle', 'file1', reference='def1')
-    assert file1 == None
+    assert file1 is None
 
 
 def test_addml_basic_elem():
-    """Tests the addml_basic_elem function."""
+    """Tests the addml_basic_elem function by comparing the function
+    output with a predifined string.
+    """
     xml = """<addml:charset
-    xmlns:addml="http://www.arkivverket.no/standarder/addml">UTF-8</addml:charset>"""
+    xmlns:addml="http://www.arkivverket.no/standarder/addml"
+    >UTF-8</addml:charset>"""
     charset = f.addml_basic_elem('charset', 'UTF-8')
-    assert h.compare_trees(ET.fromstring(xml), charset) == True
+    assert h.compare_trees(ET.fromstring(xml), charset) is True
 
 
 def test_addml_basic_elem_fail():
     """Tests that the addml_basic_elem function doesn't write
     data if input tag is unsupported.."""
     fail = f.addml_basic_elem('test', 'test')
-    assert fail == None
+    assert fail is None
 
 
 def test_delimfileformat():
-    """Tests the delimfileformat function."""
+    """Tests the delimfileformat function by comparing the function
+    output with a predifined string.
+    """
     xml = """<addml:delimFileFormat
-    xmlns:addml="http://www.arkivverket.no/standarder/addml"><addml:recordSeparator>CR+LF</addml:recordSeparator><addml:fieldSeparatingChar>;</addml:fieldSeparatingChar><addml:quotingChar>'</addml:quotingChar></addml:delimFileFormat>"""
+    xmlns:addml="http://www.arkivverket.no/standarder/addml"
+    ><addml:recordSeparator>CR+LF</addml:recordSeparator
+    ><addml:fieldSeparatingChar>;</addml:fieldSeparatingChar
+    ><addml:quotingChar>'</addml:quotingChar></addml:delimFileFormat>"""
     charset = f.delimfileformat('CR+LF', ';', quotingchar="'")
-    assert h.compare_trees(ET.fromstring(xml), charset) == True
+    assert h.compare_trees(ET.fromstring(xml), charset) is True
 
 
 def test_iter_flatfiles():
-    """Test iter_flatfiles"""
+    """Test iter_flatfiles by asserting that only the
+    relevant sections are iterated through from the testdata.
+    """
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     file2 = f.definition_elems('flatFile', 'file2', reference='def2')
     file3 = f.definition_elems('flatFile', 'file3', reference='def3')
@@ -110,7 +127,9 @@ def test_iter_flatfiles():
 
 
 def test_iter_flatfiledefinitions():
-    """Test iter_flatfiledefinitions"""
+    """Test iter_flatfiledefinitions by asserting that only the
+    relevant sections are iterated through from the testdata.
+    """
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     file2 = f.definition_elems('flatFile', 'file2', reference='def2')
     file3 = f.definition_elems('flatFile', 'file3', reference='def3')
@@ -125,7 +144,9 @@ def test_iter_flatfiledefinitions():
 
 
 def test_flatfile_count():
-    """Test flatfile_count"""
+    """Test flatfile_count by asserting that the number of
+    counted sections matches the testdata.
+    """
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     file2 = f.definition_elems('flatFile', 'file2', reference='def2')
     file3 = f.definition_elems('flatFile', 'file3', reference='def3')
@@ -136,7 +157,9 @@ def test_flatfile_count():
 
 
 def test_flatfiledefinition_count():
-    """Test flatfiledefinition_count"""
+    """Test flatfiledefinition_count by asserting that the number of
+    counted sections matches the testdata.
+    """
     file1 = f.definition_elems('flatFile', 'file1', reference='def1')
     file2 = f.definition_elems('flatFile', 'file2', reference='def2')
     file3 = f.definition_elems('flatFile', 'file3', reference='def3')
@@ -147,7 +170,9 @@ def test_flatfiledefinition_count():
 
 
 def test_parse_charset():
-    """Test the parse_charset function."""
+    """Test the parse_charset function by asserting the output value
+    from addml data.
+    """
     charset = f.addml_basic_elem('charset', 'UTF-8')
     fftype = f.wrapper_elems('flatFileTypes', child_elements=[charset])
     xml = a.addml(child_elements=[fftype])
