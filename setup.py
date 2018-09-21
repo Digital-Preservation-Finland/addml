@@ -1,6 +1,7 @@
 """Install addml."""
 
 from setuptools import setup, find_packages
+from version import get_version
 
 
 def main():
@@ -8,7 +9,7 @@ def main():
     setup(
         name='addml',
         packages=find_packages(exclude=['tests', 'tests.*']),
-        version='0.1',
+        version=get_version(),
         install_requires=[
             'lxml',
             'xml_helpers'
