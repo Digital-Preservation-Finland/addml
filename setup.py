@@ -12,11 +12,8 @@ def main():
         version=get_version(),
         install_requires=[
             'lxml',
-            'xml_helpers'
-        ],
-        dependency_links=[
-            'git+https://gitlab.csc.fi/dpres/xml-helpers.git'
-            '@develop#egg=xml_helpers-0.0'
+            'xml_helpers@git+https://gitlab.csc.fi/dpres/xml-helpers.git'
+            '@develop'
         ]
     )
 
