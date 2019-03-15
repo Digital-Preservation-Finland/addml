@@ -5,7 +5,6 @@
 import lxml.etree as ET
 import xml_helpers.utils as h
 
-
 ADDML_NS = 'http://www.arkivverket.no/standarder/addml'
 NAMESPACES = {'addml': ADDML_NS,
               'xsi': h.XSI_NS}
@@ -15,11 +14,14 @@ def addml_ns(tag, prefix=""):
     """Adds ADDML namespace to tags"""
     if prefix:
         tag = tag[0].upper() + tag[1:]
-        return'{%s}%s%s' % (ADDML_NS, prefix, tag)
+        return '{%s}%s%s' % (ADDML_NS, prefix, tag)
     return '{%s}%s' % (ADDML_NS, tag)
 
 
-def _element(tag, prefix="", ns={}):
+# TODO: Rename this element when doing actual refactoring,
+#       because this is used in other modules as well.
+# TODO: When doing actual refactoring, resolve redefined-outer-name warning.
+def _element(tag, prefix="", ns=None):
     """Return _ElementInterface with ADDML namespace.
 
     Prefix parameter is useful for adding prefixed to lower case tags.
@@ -34,11 +36,16 @@ def _element(tag, prefix="", ns={}):
     :returns: ElementTree element object
 
     """
+    if ns is None:
+        ns = {}
     ns['addml'] = ADDML_NS
     return ET.Element(addml_ns(tag, prefix), nsmap=ns)
 
 
-def _subelement(parent, tag, prefix="", ns={}):
+# TODO: Rename this element when doing actual refactoring,
+#       because this is used in other modules as well.
+# TODO: When doing actual refactoring, resolve redefined-outer-name warning.
+def _subelement(parent, tag, prefix="", ns=None):
     """Return subelement for the given parent element. Created element
     is appended to parent element.
 
@@ -48,15 +55,19 @@ def _subelement(parent, tag, prefix="", ns={}):
     :returns: Created subelement
 
     """
+    if ns is None:
+        ns = {}
     ns['addml'] = ADDML_NS
     return ET.SubElement(parent, addml_ns(tag, prefix), nsmap=ns)
 
 
-def addml(child_elements=None, namespaces=NAMESPACES):
+def addml(child_elements=None, namespaces=None):
     """Creates an addml root element with correct namespace definition
     and schemalocation attributes. Also creates the mandatory
     <addml:dataset> element within the root element.
     """
+    if namespaces is None:
+        namespaces = NAMESPACES
     _addml = _element('addml', ns=namespaces)
     _addml.set(
         h.xsi_ns('schemaLocation'),

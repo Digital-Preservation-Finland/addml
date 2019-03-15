@@ -15,7 +15,7 @@ def test_parse_flatfiledefinitions_simple():
     addml = 'tests/data/addml_simple.xml'
     i = 0
     for addmls in s.parse_flatfiledefinitions(addml):
-        i = i +1
+        i = i + 1
         assert f.flatfile_count(addmls) == 1
         assert f.flatfiledefinition_count(addmls) == 1
         assert a.sections_count(addmls, 'flatFileType') == 1

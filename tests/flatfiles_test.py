@@ -58,7 +58,7 @@ def test_definition_elems_noname():
     fidef = f.definition_elems('fieldDefinition', 'fidef1')
 
     assert list(fidef.attrib.keys()) == ['name', 'typeReference']
-    assert len(fidef.get('typeReference')) > 0
+    assert fidef.get('typeReference')
 
 
 def test_definition_elems_removeref():
