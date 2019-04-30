@@ -1,7 +1,6 @@
 stages:
   - rpm-package
   - local-test
-  - e2e-distributed
   - rpm-stable
 
 rpm-package:
@@ -38,31 +37,19 @@ unit-test-python36:
   except:
     - master
 
-e2e-localhost-preservation:
+e2e-localhost-archives:
   stage: local-test
   script:
-    - 'e2e-localhost.sh preservation'
+    - 'e2e-localhost-archives.sh dpres-siptools-archives'
   except:
     - master
 
-e2e-localhost-access-rest-api:
+e2e-localhost-siptools-research:
   stage: local-test
   script:
-    - 'e2e-localhost.sh access-rest-api'
+    - 'e2e-fairdata-localhost.sh dpres-research-rest-api'
   except:
     - master
-
-e2e-distributed-preservation:
-  stage: e2e-distributed
-  tags:
-    - e2e-distributed
-  script:
-    - 'e2e-distributed.sh preservation'
-  after_script:
-    - 'sudo umount e2e-distributed-preservation/.sshfs'
-  only:
-    - develop
-    - tags
 
 rpm-stable:
   stage: rpm-stable
