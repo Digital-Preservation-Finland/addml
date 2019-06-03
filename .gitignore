@@ -17,4 +17,6 @@ doc/source/tests
 workspace/
 .cache/
 rpmbuild/
-venv/
+venv*/
+.tox
+junit*.xml
