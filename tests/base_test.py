@@ -1,9 +1,10 @@
 """Test for the ADDML class."""
+from __future__ import unicode_literals
 
-import lxml.etree as ET
-import xml_helpers.utils as h
 import addml.base as a
 import addml.flatfiles as f
+import lxml.etree as ET
+import xml_helpers.utils as h
 
 
 def test_addml_ns():

@@ -1,16 +1,17 @@
 # coding=utf-8
 """Functions for reading and writing ADDML data.
 """
+from __future__ import unicode_literals
 
-import os
 import copy
+import os
 
+from addml.base import (addml, find_section_by_name, iter_sections, parse_name,
+                        parse_reference)
+from addml.flatfiles import (flatfiledefinition_count,
+                             iter_flatfiledefinitions, iter_flatfiles,
+                             parse_charset, wrapper_elems)
 from xml_helpers.utils import readfile
-
-from addml.base import parse_name, parse_reference, find_section_by_name, \
-        addml, iter_sections
-from addml.flatfiles import iter_flatfiles, wrapper_elems, parse_charset, \
-        flatfiledefinition_count, iter_flatfiledefinitions
 
 
 def parse_flatfiledefinitions(path):

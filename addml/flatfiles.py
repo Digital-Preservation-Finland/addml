@@ -1,13 +1,14 @@
 # coding=utf-8
 """Utils for reading and writing ADDML data.
 """
+from __future__ import unicode_literals
 
 from uuid import uuid4
 
-import xml_helpers.utils as h
+import six
 
-from addml.base import _element, _subelement, \
-        iter_elements, NAMESPACES
+import xml_helpers.utils as h
+from addml.base import NAMESPACES, _element, _subelement, iter_elements
 
 
 def wrapper_elems(tag, child_elements=None):
@@ -43,7 +44,7 @@ def definition_elems(tag, attname, reference=None, child_elements=None):
         _definition_el.set('name', attname)
 
         if tag in ref_elems and not reference:
-            reference = str(uuid4())
+            reference = six.text_type(uuid4())
         if tag in noref_elems:
             reference = None
 
@@ -130,5 +131,5 @@ def flatfiledefinition_count(addml_el):
 
 def parse_charset(section):
     """Returns the value of the charset within a given section."""
-    return h.encode_utf8(section.xpath(".//addml:charset/text()",
+    return h.decode_utf8(section.xpath(".//addml:charset/text()",
                                        namespaces=NAMESPACES)[0])
