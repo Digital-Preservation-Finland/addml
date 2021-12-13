@@ -15,7 +15,7 @@ Release:        %{file_release_number}%{file_release_tag}.%{file_build_number}.g
 Summary:        ADDML tools
 Group:          Applications/Archiving
 License:        LGPLv3+
-URL:            http://www.csc.fi
+URL:            https://digitalpreservation.fi
 Source0:        %{file_prefix}-v%{file_version}%{?file_release_tag}-%{file_build_number}-g%{file_commit_ref}.%{file_ext}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
@@ -33,7 +33,7 @@ ADDML tools
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install PREFIX="%{_prefix}" ROOT="%{buildroot}"
+make install PREFIX="%{_prefix}" ROOT="%{buildroot}" PYTHON=python2
 
 %clean
 rm -rf $RPM_BUILD_ROOT
