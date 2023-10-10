@@ -2,5 +2,4 @@ pytest
 coverage
 pytest-cov
 lxml
-six
 git+https://github.com/Digital-Preservation-Finland/xml-helpers.git@develop#egg=xml_helpers

@@ -5,8 +5,6 @@ from __future__ import unicode_literals
 
 from uuid import uuid4
 
-import six
-
 import xml_helpers.utils as h
 from addml.base import NAMESPACES, _element, _subelement, iter_elements
 
@@ -44,7 +42,7 @@ def definition_elems(tag, attname, reference=None, child_elements=None):
         _definition_el.set('name', attname)
 
         if tag in ref_elems and not reference:
-            reference = six.text_type(uuid4())
+            reference = str(uuid4())
         if tag in noref_elems:
             reference = None
 

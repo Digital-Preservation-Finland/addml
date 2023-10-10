@@ -1,8 +1,6 @@
 """Test for the ADDML flatFiles class."""
 from __future__ import unicode_literals
 
-import six
-
 import addml.base as a
 import addml.flatfiles as f
 import lxml.etree as ET
@@ -125,7 +123,7 @@ def test_iter_flatfiles():
     i = 0
     for iter_elem in f.iter_flatfiles(xml):
         i = i + 1
-        assert iter_elem.get('name') == 'file' + six.text_type(i)
+        assert iter_elem.get('name') == 'file' + str(i)
     assert i == 3
 
 
@@ -142,7 +140,7 @@ def test_iter_flatfiledefinitions():
     i = 0
     for iter_elem in f.iter_flatfiledefinitions(xml):
         i = i + 1
-        assert iter_elem.get('name') == 'def' + six.text_type(i)
+        assert iter_elem.get('name') == 'def' + str(i)
     assert i == 2
 
 

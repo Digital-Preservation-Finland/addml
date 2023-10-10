@@ -1,8 +1,6 @@
 """Test for the ADDML flatFiles class."""
 from __future__ import unicode_literals
 
-import six
-
 import addml.base as a
 import addml.flatfiles as f
 import addml.split_addml as s
@@ -45,7 +43,7 @@ def test_parse_flatfiledefinitions_medium():
         assert a.sections_count(addmls, 'fieldTypes') == 1
         for flatfile in f.iter_flatfiles(addmls):
             assert \
-                a.parse_name(flatfile) == 'csvfile' + six.text_type(i) + '.csv'
+                a.parse_name(flatfile) == 'csvfile' + str(i) + '.csv'
     assert i == 3
 
 
@@ -66,7 +64,7 @@ def test_parse_flatfiledefinitions_complex():
         assert a.sections_count(addmls, 'recordType') == 1
         assert a.sections_count(addmls, 'fieldTypes') == 1
         for ffdef in f.iter_flatfiledefinitions(addmls):
-            assert a.parse_name(ffdef) == 'testdef' + six.text_type(i)
+            assert a.parse_name(ffdef) == 'testdef' + str(i)
             if a.parse_name(ffdef) == 'testdef1':
                 assert f.flatfile_count(addmls) == 3
                 assert f.parse_charset(addmls) == 'UTF-8'
