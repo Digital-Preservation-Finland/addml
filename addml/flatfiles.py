@@ -1,7 +1,5 @@
-# coding=utf-8
 """Utils for reading and writing ADDML data.
 """
-from __future__ import unicode_literals
 
 from uuid import uuid4
 
@@ -107,14 +105,12 @@ def delimfileformat(recordseparator, fieldseparatingchar, quotingchar=None):
 
 def iter_flatfiles(addml_el):
     """Iterates all flatFiles from starting element."""
-    for elem in iter_elements(addml_el, 'flatFile'):
-        yield elem
+    yield from iter_elements(addml_el, 'flatFile')
 
 
 def iter_flatfiledefinitions(addml_el):
     """Iterates all flatFileDefinitions from starting element."""
-    for elem in iter_elements(addml_el, 'flatFileDefinition'):
-        yield elem
+    yield from iter_elements(addml_el, 'flatFileDefinition')
 
 
 def flatfile_count(addml_el):

@@ -1,5 +1,4 @@
 """Test for the ADDML flatFiles class."""
-from __future__ import unicode_literals
 
 import addml.base as a
 import addml.flatfiles as f

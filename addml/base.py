@@ -1,7 +1,5 @@
-# coding=utf-8
 """Utils for reading and writing ADDML data.
 """
-from __future__ import unicode_literals
 
 import lxml.etree as ET
 import xml_helpers.utils as h
@@ -15,8 +13,8 @@ def addml_ns(tag, prefix=""):
     """Adds ADDML namespace to tags"""
     if prefix:
         tag = tag[0].upper() + tag[1:]
-        return '{%s}%s%s' % (ADDML_NS, prefix, tag)
-    return '{%s}%s' % (ADDML_NS, tag)
+        return '{{{}}}{}{}'.format(ADDML_NS, prefix, tag)
+    return '{{{}}}{}'.format(ADDML_NS, tag)
 
 
 # TODO: Rename this element when doing actual refactoring,
@@ -93,8 +91,7 @@ def iter_elements(starting_element, tag):
     :returns: Generator object for iterating all elements
 
     """
-    for elem in starting_element.findall('.//' + addml_ns(tag)):
-        yield elem
+    yield from starting_element.findall('.//' + addml_ns(tag))
 
 
 def parse_name(section):
@@ -117,8 +114,7 @@ def parse_reference(section):
 
 def iter_sections(addml_el, section):
     """Iterate all addml data sections from starting element."""
-    for elem in iter_elements(addml_el, section):
-        yield elem
+    yield from iter_elements(addml_el, section)
 
 
 def sections_count(addml_el, section):

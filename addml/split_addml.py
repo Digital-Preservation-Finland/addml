@@ -1,7 +1,5 @@
-# coding=utf-8
 """Functions for reading and writing ADDML data.
 """
-from __future__ import unicode_literals
 
 import copy
 import os
