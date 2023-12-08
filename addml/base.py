@@ -13,8 +13,8 @@ def addml_ns(tag, prefix=""):
     """Adds ADDML namespace to tags"""
     if prefix:
         tag = tag[0].upper() + tag[1:]
-        return '{{{}}}{}{}'.format(ADDML_NS, prefix, tag)
-    return '{{{}}}{}'.format(ADDML_NS, tag)
+        return f'{{{ADDML_NS}}}{prefix}{tag}'
+    return f'{{{ADDML_NS}}}{tag}'
 
 
 # TODO: Rename this element when doing actual refactoring,
