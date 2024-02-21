@@ -1,6 +1,11 @@
 Release notes
 =============
 
+Version 0.13
+------------
+
+- Code cleanups and syntax fixes
+
 Version 0.12
 ------------
 
