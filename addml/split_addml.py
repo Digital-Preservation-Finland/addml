@@ -1,18 +1,32 @@
 """Functions for reading and writing ADDML data.
 """
+from __future__ import annotations
 
 import copy
 import os
+from collections.abc import Generator
+from typing import Literal
 
-from addml.base import (addml, find_section_by_name, iter_sections, parse_name,
-                        parse_reference)
-from addml.flatfiles import (flatfiledefinition_count,
-                             iter_flatfiledefinitions, iter_flatfiles,
-                             parse_charset, wrapper_elems)
+import lxml.etree as ET
 from xml_helpers.utils import readfile
 
+from addml.base import (
+    addml,
+    find_section_by_name,
+    iter_sections,
+    parse_name,
+    parse_reference,
+)
+from addml.flatfiles import (
+    flatfiledefinition_count,
+    iter_flatfiledefinitions,
+    iter_flatfiles,
+    parse_charset,
+    wrapper_elems,
+)
 
-def parse_flatfiledefinitions(path):
+
+def parse_flatfiledefinitions(path: str) -> Generator[ET._Element]:
     """Parses ADDML data and splits the data into new ADDML data
     files for each flatFileDefinition in the original data file.
     Returns the ADDML data for each created file.
@@ -28,7 +42,7 @@ def parse_flatfiledefinitions(path):
         yield addmldata
 
 
-def parse_flatfilenames(path, reference):
+def parse_flatfilenames(path: str, reference: str) -> Generator[str | None]:
     """Returns the @name attribute for each flatFile whose
     @definitionReference attribute value matches the supplied value.
     """
@@ -41,7 +55,9 @@ def parse_flatfilenames(path, reference):
             yield flatfilename
 
 
-def create_new_addml(root, flatfiledefinition):
+def create_new_addml(
+    root: ET._Element, flatfiledefinition: ET._Element
+) -> ET._Element:
     """Creates new addml metadata for each flatFileDefinition in the
     original addml metadata. Only the relevant sections from flatFiles,
     flatFileTypes and recordTypes are included in the new addml metadata
@@ -87,12 +103,12 @@ def create_new_addml(root, flatfiledefinition):
     flatfiles = wrapper_elems('flatFiles',
                               child_elements=flatfiles_list)
 
-    addmldata = addml(child_elements=[flatfiles])
-
-    return addmldata
+    return addml(child_elements=[flatfiles])
 
 
-def check_addml_relpath(path):
+def check_addml_relpath(
+    path: str,
+) -> tuple[str, str] | tuple[Literal[False], Literal[False]]:
     """Checks if an ADDML file exists within the package. Returns the
     relative path of the ADDML file if one is found, otherwise returns
     False.
@@ -112,7 +128,7 @@ def check_addml_relpath(path):
     return False, False
 
 
-def get_charset_with_filename(path, filename):
+def get_charset_with_filename(path: str, filename: str) -> str | None:
     """Returns the charset from the ADDML data for a given file. The
     filename is matched against the @name attribute for each flatFile
     element and the correct charset is returned from the correct
@@ -127,7 +143,7 @@ def get_charset_with_filename(path, filename):
             type_reference = parse_reference(definition)
             flatfiletype = find_section_by_name(root, 'flatFileType',
                                                 type_reference)
-            charset = 'charset=%s' % parse_charset(flatfiletype)
+            charset = f'charset={parse_charset(flatfiletype)}'
 
             return charset
     return None

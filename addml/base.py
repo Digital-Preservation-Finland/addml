@@ -1,5 +1,8 @@
 """Utils for reading and writing ADDML data.
 """
+from __future__ import annotations
+
+from collections.abc import Generator, Iterable
 
 import lxml.etree as ET
 import xml_helpers.utils as h
@@ -9,7 +12,7 @@ NAMESPACES = {'addml': ADDML_NS,
               'xsi': h.XSI_NS}
 
 
-def addml_ns(tag, prefix=""):
+def addml_ns(tag: str, prefix: str = "") -> str:
     """Adds ADDML namespace to tags"""
     if prefix:
         tag = tag[0].upper() + tag[1:]
@@ -20,7 +23,9 @@ def addml_ns(tag, prefix=""):
 # TODO: Rename this element when doing actual refactoring,
 #       because this is used in other modules as well.
 # TODO: When doing actual refactoring, resolve redefined-outer-name warning.
-def _element(tag, prefix="", ns=None):
+def _element(
+    tag: str, prefix: str = "", ns: dict[str, str] | None = None
+) -> ET._Element:
     """Return _ElementInterface with ADDML namespace.
 
     Prefix parameter is useful for adding prefixed to lower case tags.
@@ -30,8 +35,9 @@ def _element(tag, prefix="", ns=None):
         element.tag
         'flatFileDefinition'
 
-    :tag: Tagname
-    :prefix: Prefix for the tag (default="")
+    :param tag: Tagname
+    :param prefix: Prefix for the tag (default="")
+    :param ns: Namespace
     :returns: ElementTree element object
 
     """
@@ -44,13 +50,19 @@ def _element(tag, prefix="", ns=None):
 # TODO: Rename this element when doing actual refactoring,
 #       because this is used in other modules as well.
 # TODO: When doing actual refactoring, resolve redefined-outer-name warning.
-def _subelement(parent, tag, prefix="", ns=None):
+def _subelement(
+    parent: ET._Element,
+    tag: str,
+    prefix: str = "",
+    ns: dict[str, str] | None = None,
+) -> ET._Element:
     """Return subelement for the given parent element. Created element
     is appended to parent element.
 
-    :parent: Parent element
-    :tag: Element tagname
-    :prefix: Prefix for the tag
+    :param parent: Parent element
+    :param tag: Element tagname
+    :param prefix: Prefix for the tag
+    :param ns: Namespace
     :returns: Created subelement
 
     """
@@ -60,46 +72,56 @@ def _subelement(parent, tag, prefix="", ns=None):
     return ET.SubElement(parent, addml_ns(tag, prefix), nsmap=ns)
 
 
-def addml(child_elements=None, namespaces=None):
+def addml(
+    child_elements: Iterable[ET._Element] | None = None,
+    namespaces: dict[str, str] | None = None,
+) -> ET._Element:
     """Creates an addml root element with correct namespace definition
     and schemalocation attributes. Also creates the mandatory
     <addml:dataset> element within the root element.
+
+    :param child_elements: Iterable of elements
+    :param namespaces: Namespace to use
+    :returns: Addml root element
     """
     if namespaces is None:
         namespaces = NAMESPACES
-    _addml = _element('addml', ns=namespaces)
-    _addml.set(
+    addml_ = _element('addml', ns=namespaces)
+    addml_.set(
         h.xsi_ns('schemaLocation'),
         'http://www.arkivverket.no/standarder/addml '
         'http://schema.arkivverket.no/ADDML/latest/addml.xsd')
 
-    _dataset = _subelement(_addml, 'dataset')
+    dataset_ = _subelement(addml_, 'dataset')
 
     if child_elements:
         for elem in child_elements:
-            _dataset.append(elem)
+            dataset_.append(elem)
 
-    return _addml
+    return addml_
 
 
-def iter_elements(starting_element, tag):
+def iter_elements(
+    starting_element: ET._Element, tag: str
+) -> Generator[ET._Element]:
     """Iterate all element from starting element that match the `tag`
     parameter. Tag is always prefixed to ADDML namespace before
     matching.
 
-    :starting_element: Element where matching elements are searched
+    :param starting_element: Element where matching elements are searched
+    :param tag: String tag
     :returns: Generator object for iterating all elements
 
     """
     yield from starting_element.findall('.//' + addml_ns(tag))
 
 
-def parse_name(section):
+def parse_name(section: ET._Element) -> str:
     """Returns the value of the @name attribute of an element."""
     return section.get('name')
 
 
-def parse_reference(section):
+def parse_reference(section: ET._Element) -> str:
     """Returns the value of the reference attribute of an element.
     The reference attribute is either @definitionReference if the
     element is a <flatFile> or @typeReference for other elements.
@@ -112,17 +134,21 @@ def parse_reference(section):
     return section.get(referencetype)
 
 
-def iter_sections(addml_el, section):
+def iter_sections(
+    addml_el: ET._Element, section: str
+) -> Generator[ET._Element]:
     """Iterate all addml data sections from starting element."""
     yield from iter_elements(addml_el, section)
 
 
-def sections_count(addml_el, section):
+def sections_count(addml_el: ET._Element, section: str) -> int:
     """Return number of sections in ADDML data."""
-    return len([x for x in iter_sections(addml_el, section)])
+    return len(list(iter_sections(addml_el, section)))
 
 
-def find_section_by_name(addml_el, section, name):
+def find_section_by_name(
+    addml_el: ET._Element, section: str, name: str
+) -> ET._Element | None:
     """Find an addml section by its @name attribute value."""
     for elem in iter_sections(addml_el, section):
         if elem.get('name') == name:
